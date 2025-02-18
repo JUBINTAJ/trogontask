@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Videos } from '../../../Redux/Slice';
+import { Link } from 'react-router-dom';
 
 function Videoplay() {
   const { videoById, loading, error } = useSelector((state) => state.Subject);
@@ -44,9 +45,12 @@ function Videoplay() {
   return (
     <div className="min-h-screen bg-[#f8e6ff] p-4">
       <div className="flex items-center mb-8">
-        <button className="text-black text-2xl" onClick={() => window.history.back()}>
+        <Link to={'/Videolist'}>
+        
+        <button className="text-black text-2xl" >
           &larr; Back
         </button>
+        </Link>
       </div>
 
       <div className="relative">
