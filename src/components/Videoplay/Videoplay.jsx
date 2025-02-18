@@ -22,10 +22,11 @@ function Videoplay() {
   }
 
   const getYouTubeEmbedUrl = (url) => {
+    if (!url) return "";
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
     return match
-      ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&controls=1&fs=0&cc_load_policy=0`
-      : '';
+      ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&controls=0&fs=0&cc_load_policy=0`
+      : "";
   };
 
   const getVimeoEmbedUrl = (url) => {
@@ -51,13 +52,13 @@ function Videoplay() {
       <div className="relative">
         <div className="w-full h-[500px] bg-gray-900 flex justify-center items-center relative">
           {embedUrl ? (
-          <iframe
-          className="w-full h-full"
-          src={`${embedUrl}?modestbranding=1&rel=0&autoplay=1&controls=0&fs=0&iv_load_policy=3&disablekb=1`}
-          title={videoById.title}
-          allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+            <iframe
+              className="w-full h-full"
+              src={`${embedUrl}?modestbranding=1&rel=0&autoplay=1&controls=0&fs=0&iv_load_policy=3&disablekb=1`}
+              title={videoById.title}
+              allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           ) : (
             <div className="p-5 text-white">Invalid video URL</div>
           )}
@@ -67,13 +68,16 @@ function Videoplay() {
           <h1 className="text-3xl font-bold">{videoById.title}</h1>
           <p className="text-gray-600">{videoById.description}</p>
           <div className="flex flex gap-6 mt-8 justify-center items-center">
-    <button className="bg-white text-black py-4 px-12 text-xl rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-      Download
-    </button>
-    <button className="bg-white text-black py-4 px-12 text-xl rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-      Doubts
-    </button>
-  </div>
+            <button className="bg-white text-black py-4 px-12 text-xl rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8l-8 8-8-8" />
+              </svg>
+              Download
+            </button>
+            <button className="bg-white text-black py-4 px-12 text-xl rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              Doubts
+            </button>
+          </div>
         </div>
       </div>
     </div>
