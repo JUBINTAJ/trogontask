@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { setVideoById, Videos } from '../../../Redux/Slice'; 
+import { ArrowLeft} from "lucide-react"
 
 function Videoss() {
   const { video, loading, error } = useSelector((state) => state.Subject);
@@ -26,10 +27,12 @@ function Videoss() {
 
   return (
     <div className="min-h-screen bg-[#f8e6ff] p-4">
-      <div className="flex items-center mb-8">
-        <Link to="/chapter">
-          <button className="text-black text-2xl">&larr;</button>
-        </Link>
+          <div className="p-4">
+          <Link  to={'/chapter'}>
+        <button className="p-2">
+          <ArrowLeft className="h-6 w-6" />
+        </button>
+          </Link>
       </div>
 
       <div className="relative">

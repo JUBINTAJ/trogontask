@@ -2,14 +2,15 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Videos } from '../../../Redux/Slice';
 import { Link } from 'react-router-dom';
+import { ArrowLeft, Download, HelpCircle } from "lucide-react";
 
 function Videoplay() {
   const { videoById, loading, error } = useSelector((state) => state.Subject);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Videos()); 
-  }, [ dispatch]);
+    dispatch(Videos());
+  }, [dispatch]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -18,16 +19,17 @@ function Videoplay() {
   if (error) {
     return <div>Error: {error}</div>;
   }
+
   if (!videoById) {
     return <div>Video not found</div>;
   }
 
   const getYouTubeEmbedUrl = (url) => {
-    if (!url) return "";
+    if (!url) return '';
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
     return match
-      ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&controls=0&fs=0&cc_load_policy=0`
-      : "";
+      ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&controls=0&fs=0&cc_load_policy=0&autohide=1&disablekb=1`
+      : '';
   };
 
   const getVimeoEmbedUrl = (url) => {
@@ -44,12 +46,11 @@ function Videoplay() {
 
   return (
     <div className="min-h-screen bg-[#f8e6ff] p-4">
-      <div className="flex items-center mb-8">
+      <div className="p-4">
         <Link to={'/Videolist'}>
-        
-        <button className="text-black text-2xl" >
-          &larr; Back
-        </button>
+          <button className="p-2">
+            <ArrowLeft className="h-6 w-6" />
+          </button>
         </Link>
       </div>
 
@@ -58,7 +59,7 @@ function Videoplay() {
           {embedUrl ? (
             <iframe
               className="w-full h-full"
-              src={`${embedUrl}?modestbranding=1&rel=0&autoplay=1&controls=0&fs=0&iv_load_policy=3&disablekb=1`}
+              src={embedUrl}
               title={videoById.title}
               allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -71,15 +72,14 @@ function Videoplay() {
         <div className="lg:h-[400px] sm:h-auto w-full shadow-2xl p-10 flex flex-col gap-5 bg-white">
           <h1 className="text-3xl font-bold">{videoById.title}</h1>
           <p className="text-gray-600">{videoById.description}</p>
-          <div className="flex flex gap-6 mt-8 justify-center items-center">
-            <button className="bg-white text-black py-4 px-12 text-xl rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8l-8 8-8-8" />
-              </svg>
-              Download
+          <div className="grid grid-cols-2 gap-4 pt-4">
+            <button className="flex items-center justify-center gap-2 bg-white rounded-2xl py-4 px-6 shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-shadow">
+              <Download className="h-5 w-5" />
+              <span className="font-medium">Download</span>
             </button>
-            <button className="bg-white text-black py-4 px-12 text-xl rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              Doubts
+            <button className="flex items-center justify-center gap-2 bg-white rounded-2xl py-4 px-6 shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-shadow">
+              <HelpCircle className="h-5 w-5" />
+              <span className="font-medium">Doubts</span>
             </button>
           </div>
         </div>
