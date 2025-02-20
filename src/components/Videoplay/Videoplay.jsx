@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Videos } from '../../../Redux/Slice';
+import { setVideoById, Videos } from '../../../Redux/Slice';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, HelpCircle } from "lucide-react";
+import ReactPlayer from 'react-player';
 
 function Videoplay() {
   const { videoById, loading, error } = useSelector((state) => state.Subject);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Videos());
+    dispatch(Videos);
   }, [dispatch]);
 
   if (loading) {
@@ -28,16 +29,16 @@ function Videoplay() {
     if (!url) return '';
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
     return match
-      ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&controls=0&fs=0&cc_load_policy=0&autohide=1&disablekb=1`
-      : '';
+      ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&controls=0&fs=0&cc_load_policy=0&autohide=1&disablekb=1&fs=0`
+      : "";
   };
-
+  
   const getVimeoEmbedUrl = (url) => {
     const match = url.match(/vimeo\.com\/(\d+)/);
     return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=1&byline=0&title=0&portrait=0` : '';
   };
 
-  let embedUrl = '';
+  let embedUrl = "";
   if (videoById.video_type === 'YouTube') {
     embedUrl = getYouTubeEmbedUrl(videoById.video_url);
   } else if (videoById.video_type === 'Vimeo') {
@@ -57,13 +58,17 @@ function Videoplay() {
       <div className="relative">
         <div className="w-full h-[500px] bg-gray-900 flex justify-center items-center relative">
           {embedUrl ? (
-            <iframe
-              className="w-full h-full"
-              src={embedUrl}
-              title={videoById.title}
-              allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+       <ReactPlayer
+  url={embedUrl}
+  config={{
+    youtube: {
+      playerVars: { showinfo: 1 ,controls:false }
+    },
+    facebook: {
+      appId: '12345'
+    }
+  }}
+/>
           ) : (
             <div className="p-5 text-white">Invalid video URL</div>
           )}

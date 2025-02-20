@@ -1,40 +1,48 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Chapter, getsubject } from "../../../Redux/Slice";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Chapter, getsubject } from '../../../Redux/Slice';
+import { useNavigate } from 'react-router-dom';
 
 function Subject() {
   const dispatch = useDispatch();
-  const [id,setId]=useState(null)
+  const [id, setId] = useState(null);
   const { subject, loading, error } = useSelector((state) => state.Subject);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+  const [visited, setVisited] = useState(() => {
+    const savedVisit = localStorage.getItem('Subjects');
+    return savedVisit ? JSON.parse(savedVisit) : [];
+  });
 
   useEffect(() => {
     dispatch(getsubject());
   }, [dispatch]);
 
+  useEffect(() => {
+    localStorage.setItem('Subjects', JSON.stringify(visited));
+  }, [visited]);
+
+  const handleClick = (id) => {
+    setVisited((prevVisited) => {
+      const updatedVisited = prevVisited.filter((visitedId) => visitedId !== id);
+      return [...updatedVisited, id];
+    });
+    dispatch(Chapter(id));
+    navigate(`/chapter/${id}`);
+    setId(id);
+  };
+
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>; 
-  }
-
-  const handle=()=>{
-    dispatch(Chapter(id))
-    navigate('/chapter')
+    return <div>Error: {error}</div>;
   }
 
   return (
     <div className="min-h-screen bg-[#8E2DE2]">
       <header className="p-4 flex items-center">
-               <button className="text-white text-2xl">
-            &larr;
-          </button>
-        <h1 className="text-white text-2xl font-medium flex-1 text-center mr-8">
-          Modules
-        </h1>
+        <h1 className="text-white text-2xl font-medium flex-1 text-center mr-8">Modules</h1>
       </header>
 
       <div className="px-4 py-2 max-w-xl mx-auto">
@@ -50,33 +58,37 @@ function Subject() {
           </div>
         </div>
 
-        <h2 className="text-white text-2xl font-semibold mb-6">
-        Subjects
-        </h2>
+        <h2 className="text-white text-2xl font-semibold mb-6">Subjects</h2>
 
         <div className="relative">
           <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-white/20" />
 
           <div className="space-y-8">
             {subject.map((subjectt) => (
-              <div key={subjectt.id} className="flex items-start gap-4" onClick={()=>{setId(subjectt.id);handle()}}>
+              <div
+                key={subjectt.id}
+                className={`flex items-start gap-4 cursor-pointer`}
+                onClick={() => handleClick(subjectt.id)}
+              >
                 <div className="relative z-10 w-12 h-12 rounded-full bg-white flex items-center justify-center shrink-0">
                   <span className="text-[#8E2DE2] text-xl font-bold">{subjectt.id}</span>
                 </div>
 
-                <div className="flex-1 bg-white/10 rounded-xl p-4 pr-2 hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="flex-1 bg-white/10 rounded-xl p-4 pr-2 hover:bg-white/20 transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <h3 className="text-white font-medium">{subjectt.title}</h3>
-                      <p className="text-yellow-300 text-sm">{subjectt.description}</p> 
+                      <h3 className={`text-blue-500 ${visited[visited.length - 1] === subjectt.id ? 'text-red-400 font-bold' : ''}`}>
+                        {subjectt.title}
+                      </h3>
+                      <p className="text-yellow-300 text-sm">{subjectt.description}</p>
                     </div>
-              
+
                     <span className="text-white/70">→</span>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
+          </div> 
         </div>
       </div>
     </div>

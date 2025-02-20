@@ -9,7 +9,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Subject />} />
-        <Route path="/chapter" element={<ChapterShow />} />
+        <Route path="/chapter/:id" element={<ChapterShow />} />
         <Route path="/Videolist" element={<Videoslist />} />
         <Route path="/Videoplay/:link" element={<Videoplay />} />
 

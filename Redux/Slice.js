@@ -30,7 +30,6 @@ export const Videos = createAsyncThunk(
 async (id) => {
     try {
       const response = await axios.get(`https://trogon.info/interview/php/api/videos.php?module_id=${id}`);
-      // console.log(response.data,"llll");
       
       return response.data;
     } catch (error) {

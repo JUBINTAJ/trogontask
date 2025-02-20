@@ -26,9 +26,9 @@ function Videoss() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8e6ff] p-4">
+    <div className="min-h-screen  bg-[#f8e6ff] p-4">
           <div className="p-4">
-          <Link  to={'/chapter'}>
+          <Link  to={'/chapter/:id'}>
         <button className="p-2">
           <ArrowLeft className="h-6 w-6" />
         </button>
@@ -48,7 +48,7 @@ function Videoss() {
             <div className="ml-4 flex-1">
               <div className="text-gray-600 text-sm">{`Step ${index + 1}`}</div>
               <div className="flex justify-between items-center">
-                <div className="font-semibold text-lg">{item.title}</div>
+                <div className={`font-semibold text-lg  ${index%2==0?'text-black':'text-blue-600'}`}>{item.title}</div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                 </svg>
